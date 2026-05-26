@@ -1,0 +1,40 @@
+{
+  "name": "chaplin",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "movie-service",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "build": "tsc",
+    "start": "node dist"
+  },
+  "keywords": [
+    "films",
+    "stream",
+    "enjoy"
+  ],
+  "author": "mend1User",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/mime-types": "^3.0.1",
+    "@types/node": "^25.6.2",
+    "@types/webtorrent": "0.109.3",
+    "dotenv": "^17.4.2",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.6",
+    "axios": "^1.16.1",
+    "cheerio": "^1.2.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mime-types": "^3.0.2",
+    "morgan": "^1.10.1",
+    "qs": "^6.15.2",
+    "webtorrent": "1.8.30"
+  }
+}

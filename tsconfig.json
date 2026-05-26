@@ -1,0 +1,18 @@
+{
+
+    "include": ["src/**/*.ts"],
+    "compilerOptions": {
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "target": "esnext",
+        "types": ["node"],
+        "outDir": "./dist",
+        "sourceMap": true,
+        "baseUrl": ".",
+        "esModuleInterop": true,
+        "noImplicitAny": false,
+    },
+    "ts-node": {
+        "esm": true
+    }
+}
