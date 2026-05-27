@@ -1,0 +1,4 @@
+export const RUTOR_URL = 'https://rutor.info/'
+export const BASE_SEARCH_URL = 'https://rutor.info/search/'
+export const MAGNET_KEY = 'magnet:?xt'
+export const SPLIT_MAGNET_STRING = 'urn:btih:'
