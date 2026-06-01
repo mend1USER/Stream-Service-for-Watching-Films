@@ -33,22 +33,33 @@
                     files: []
                 }
             },
+            async mounted() {
+                this.getMyMovies()
+            },
             computed: {
                 videoURL: ({activeVideo}) => activeVideo.fileName ? `/stream/${activeVideo.magnet}/${activeVideo.fileName}` : ''
             },
-            methods: {
-                async play(file) {
-                       const {data} = await axios.get(`/stream/add/${file.magnet}`);
-                       console.log(data)
-                        this.activeVideo = {
-                            magnet: file.magnet,
-                            fileName: data[0].name
-                        }
-                },
+            
+          methods: {
+          async play(file) {
+            const {data} = await axios.get(`stream/add/${file.magnet}`)
+            console.log(data)
+            this.activeVideo = {
+                magnet: file.magnet,
+                fileName: data[0]?.name
+            }
+          },
                 async findMovie() {
                     const response = await axios.get(`/movies/search?searchTerm=${this.searchTerm}`)
                     this.files = response.data
+
+                },
+                async getMyMovies() {
+                    const response = await axios.get('/movies')
+                    this.files = response.data
                 }
+
+
             }
         }).mount('#app');
     </script>

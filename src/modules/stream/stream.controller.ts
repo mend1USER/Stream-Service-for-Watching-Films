@@ -105,15 +105,6 @@ router.get('/:magnet/:fileName', (req: StreamRequest, res: Response, next: NextF
     end
   }
 
-  // Проверяем, существует ли вообще метод у объекта file
-if (!file || typeof file.createReadStream !== 'function') {
-  console.error('=== ОШИБКА СТРИМА ===');
-  console.error('Объект file не является стримируемым файлом. Вот чsто в нем лежит:', file);
-  
-  // Отдаем плееру ошибку, чтобы он не ждал вечно
-  return res.status(404).send('File stream unavailable');
-}
-
   const stream = file.createReadStream(streamPositions)
 
   stream.pipe(res)

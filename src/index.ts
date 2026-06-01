@@ -11,6 +11,7 @@ import moviesRouter from './modules/movies/movies.controller.js'
 
 try {
   console.log(process.env.MONGO_URL)
+  mongoose.set('strictQuery', true)
   mongoose.connect(process.env.MONGO_URL).then(() => {
     console.log('DataBase Connected')
   })
@@ -29,13 +30,6 @@ app.use('/stream', streamRouter)
 app.use('/content', contentRouter)
 app.use('/movies', moviesRouter)
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.error('=== GLOBAL ERROR ===')
-  console.error('Message:', err.message)
-  console.error('Stack:', err.stack)
-  console.error('Status:', err.status)
-  res.status(err.status || 500).json({ error: err.message })
-})
 
 const PORT = process.env.PORT || 8080
 
