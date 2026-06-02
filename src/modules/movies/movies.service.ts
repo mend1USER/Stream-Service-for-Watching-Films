@@ -3,7 +3,7 @@ import axios from 'axios'
 import { stringify } from 'qs'
 import MovieEntity from './movies.model.js'
 import { Movie } from './movies.interfaces.js'
-import { BASE_SEARCH_URL, RUTOR_URL } from './movies.const.js'
+import { BASE_SEARCH_URL, IMDB_SEARCH_URL, RUTOR_URL } from './movies.const.js'
 import { extractMagnetFromQuery } from './movies.util.js'
 
 export const movieSearch = async (searchTerm: string) => {
@@ -28,6 +28,10 @@ export const movieSearch = async (searchTerm: string) => {
     .filter(item => item.title)
 }
 
+
+
+
+
 export const create = async (input: Movie) => {
   const item = new MovieEntity(input)
   await item.save()
@@ -50,4 +54,8 @@ export const findAll = () => {
 
 export const deleteOne = (id: string) => {
   return MovieEntity.findByIdAndRemove(id)
+}
+
+export function searchInImdb(searchTerm: string) {
+    throw new Error('Function not implemented.')
 }
