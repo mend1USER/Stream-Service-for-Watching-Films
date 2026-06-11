@@ -2,6 +2,7 @@ import {Router} from 'express'
 import * as movieService from './movies.service.js'
 import * as IMDBService from './imdb.service.js'
 import { CreateMovieRequest, SearchRequest } from './movies.interfaces.js'
+import { getMovieFromIMDB } from './imdb.service.js'
 
 const router = Router()
 
@@ -31,7 +32,7 @@ router.get('/imdb-search', async ({query: {searchTerm} }: SearchRequest, res) =>
 
 router.get('/imdb/:IMDBId', async ({params: {IMDBId} }: SearchRequest, res) => {
     try {
-        const results = await IMDBService.getMovieFromIMDB(IMDBId)
+        const results = await getMovieFromIMDB(String(IMDBId))
        
         res.status(200).send(results)
     } catch (error) {

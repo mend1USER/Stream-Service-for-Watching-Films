@@ -117,4 +117,59 @@ export interface Belongstocollection {
   backdrop_path: string
 }
 
+export interface CrewMember {
+  adult: boolean
+  gender: number
+  id: number
+  know_for_department: string
+  name: string
+  original_name: string
+  popularity: number
+  profile_path?: any
+  character: string
+  cast_id?: string
+  credit_id: string
+  department: string
+  job: string
+    order: number
+}
+
+
+export interface IMDBTrailer {
+  iso_639_1: string
+  iso_3166_1: string
+  name: string
+  key: string
+  site: string
+  size: string
+  type: string
+  official: boolean
+  published_at: string
+  id: string
+}
+
+
+
+export interface GetCreditsResponse {
+  id: number
+  cast: CrewMember[]
+  crew: CrewMember[]
+}
+
+
+
+
+
+export interface GetVideosResponse {
+  id: number
+  results: IMDBTrailer[]
+}
+
+
+export interface SearchMoviesResponse {
+  page: number
+  results: Partial<IMDBMovie>
+  total_pages: number
+  total_results: number
+}
 
