@@ -29,6 +29,7 @@ app.use(logger('dev'))
 app.use('/stream', streamRouter)
 app.use('/content', contentRouter)
 app.use('/movies', moviesRouter)
+app.get('/health', (_, res) => {res.status(200).json({status: 'ok', service: 'backend', time: new Date().toISOString()})})
 
 
 const PORT = process.env.PORT || 8080

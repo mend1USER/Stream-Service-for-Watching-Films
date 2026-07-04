@@ -4,11 +4,11 @@ import { Movie } from './movies.interfaces.js'
 const entity = new Schema<Movie>({
   title: {
     type: String,
-    deafult: ''
+    default: ''
   },
   magnet: {
     type: String,
-    deafult: ''
+    default: ''
   },
   fileName: {
     type: String,
@@ -20,20 +20,20 @@ const entity = new Schema<Movie>({
   },
   plot: {
     type: String,
-    deafult: ''
+    default: ''
   },
   year: {
     type: String,
-    deafult: ''
+    default: ''
   },
   director: {
     type: String,
-    deafult: ''
+    default: ''
   },
   actors: [
     {
       type: String,
-      deafult: ''
+      default: ''
     }
   ],
   backdrop: {
@@ -42,44 +42,44 @@ const entity = new Schema<Movie>({
   },
   poster: {
     type: String,
-    deafult: ''
+    default: ''
   },
   trailer: {
     type: String,
-    deafult: ''
+    default: ''
   },
   boxOffice: {
     type: String,
-    deafult: ''
+    default: ''
   },
   released: {
     type: String,
-    deafult: ''
+    default: ''
   },
   writer: {
     type: String,
-    deafult: ''
+    default: ''
   },
   runtime: {
     type: String,
-    deafult: ''
+    default: ''
   },
   ratingImdb: {
     type: String,
-    deafult: ''
+    default: ''
   },
   imdbId: {
     type: String,
-    deafult: ''
+    default: ''
   },
   rated: {
     type: String,
-    deafult: ''
+    default: ''
   },
   genres: [
     {
       type: String,
-      deafult: ''
+      default: ''
     }
   ]
 })
