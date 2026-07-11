@@ -35,27 +35,39 @@ export interface GetMovieRequest extends Request {
   }
 }
 
+export interface ProductionCompanyInfo {
+  name: string
+  logo: string
+}
+
 export interface Movie {
-  title: string
+ title: string
+  originalTitle?: string
+  tagline?: string
   plot: string
   year: string
   magnet: string
   fileName: string
   sourceUrl: string
   director: string
-  actors: string[]
+  actors: CastMember[]
   poster: string
   backdrop: string
   trailer: string
   _id?: string
   boxOffice: string
+  budget?: number
   released: string
   writer: string
   runtime: string
   ratingImdb: string
+  voteCount?: number
+  status?: string
   imdbId: string
   rated: string
   genres: string[]
+  productionCompanies?: ProductionCompanyInfo[]
+  spokenLanguages?: string[]
 }
 
 
@@ -134,6 +146,11 @@ export interface CrewMember {
     order: number
 }
 
+export interface CastMember {
+  name: string
+  character: string
+  photo: string
+}
 
 export interface IMDBTrailer {
   iso_639_1: string
@@ -168,7 +185,7 @@ export interface GetVideosResponse {
 
 export interface SearchMoviesResponse {
   page: number
-  results: Partial<IMDBMovie>
+  results: Partial<IMDBMovie>[]
   total_pages: number
   total_results: number
 }
