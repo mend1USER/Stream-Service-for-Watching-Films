@@ -32,7 +32,7 @@ app.use('/movies', moviesRouter)
 app.get('/health', (_, res) => {res.status(200).json({status: 'ok', service: 'backend', time: new Date().toISOString()})})
 
 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 5000
 
 app.listen(PORT, () => {
   console.log(`http://localhost:${PORT}`)

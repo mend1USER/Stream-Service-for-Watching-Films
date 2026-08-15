@@ -7,15 +7,19 @@ import { getMovieFromIMDB } from './imdb.service.js'
 const router = Router()
 
 
-router.get('/search', async ({query: {searchTerm} }: SearchRequest, res) => {
-    try {
-        const results = await movieService.movieSearch(searchTerm)
-       
-        res.status(200).send(results)
-    } catch (error) {
-        res.status(400).send(error)
-    }
-   
+router.get('/search', async (req, res) => {
+  const { searchTerm, title, originalTitle, year } = req.query
+
+  try {
+    const ref = title && originalTitle && year
+      ? { title: String(title), originalTitle: String(originalTitle), year: Number(year) }
+      : undefined
+
+    const results = await movieService.movieSearch(String(searchTerm), ref)
+    res.status(200).send(results)
+  } catch (error) {
+    res.status(400).send(error)
+  }
 })
 
 

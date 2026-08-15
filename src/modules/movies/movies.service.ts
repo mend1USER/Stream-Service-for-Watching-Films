@@ -1,35 +1,48 @@
 import * as cheerio from 'cheerio'
 import axios from 'axios'
-import { stringify } from 'qs'
 import MovieEntity from './movies.model.js'
 import { Movie } from './movies.interfaces.js'
-import { BASE_SEARCH_URL, IMDB_SEARCH_URL, RUTOR_URL } from './movies.const.js'
-import { extractMagnetFromQuery } from './movies.util.js'
+import { BASE_SEARCH_URL, RUTOR_URL } from './movies.const.js'
+import { extractMagnetFromQuery, MovieRef, matchMovie, isValidMagnetHash } from './movies.util.js'
 
-export const movieSearch = async (searchTerm: string) => {
+
+export const movieSearch = async (searchTerm: string, ref?: MovieRef) => {
   const searchResult = await axios.get(`${BASE_SEARCH_URL}/${searchTerm}`)
   const $ = cheerio.load(searchResult.data)
-
   const data = $('#index tr').toArray()
 
-  return data
+  const results = data
     .map(item => {
-      const [_, magnetTag, title] = $(item).find('a').toArray()
+      try {
+        const links = $(item).find('a').toArray()
+        const magnetTag = links.find(a => $(a).attr('href')?.startsWith('magnet:'))
+        const title = links.find(a => $(a).attr('href')?.includes('/torrent/'))
 
-      const torrentUrl = `${RUTOR_URL}${$(title).attr('href')}`
-      const magnetLink = $(magnetTag).attr('href')
+        if (!magnetTag || !title) return null
 
-      return {
-        magnet: extractMagnetFromQuery(magnetLink),
-        title: $(title).text(),
-        torrentUrl
+        const magnet = extractMagnetFromQuery($(magnetTag).attr('href'))
+        if (!magnet) return null
+
+        const titleText = $(title).text()
+        if (!titleText) return null
+
+        return {
+          magnet,
+          title: titleText,
+          torrentUrl: `${RUTOR_URL}${$(title).attr('href')}`
+        }
+      } catch {
+        return null
       }
     })
-    .filter(item => item.title)
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+
+  if (ref) {
+    return results.filter(item => matchMovie(item.title, ref))
+  }
+
+  return results
 }
-
-
-
 
 
 export const create = async (input: Movie) => {
@@ -57,5 +70,5 @@ export const deleteOne = (id: string) => {
 }
 
 export function searchInImdb(searchTerm: string) {
-    throw new Error('Function not implemented.')
+  throw new Error('Function not implemented.')
 }
