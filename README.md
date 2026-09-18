@@ -19,7 +19,6 @@ bash
 docker-compose up -d
 2. Переменные окружения
 
-Скопируй .env.example в .env и заполни:
 
 bash
 cp .env.example .env
