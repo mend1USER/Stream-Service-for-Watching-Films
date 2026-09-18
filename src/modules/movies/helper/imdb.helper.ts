@@ -13,6 +13,7 @@ import { stringify } from 'qs'
 import { IMDB_SEARCH_URL } from '../movies.const.js'
 
 import 'dotenv/config'
+import { backup } from 'node:sqlite'
 
 const findCrewMember = (crew: CrewMember[], jobs: string[]) => crew.find(({ job }) => jobs.includes(job))?.name || ''
 
@@ -28,10 +29,20 @@ export const IMDBRequests = () => {
     getMovieCredits: (IMDBId: number) => axios.get<GetCreditsResponse>(`${MOVIE_URL}/${IMDBId}/credits?${queryParams}`),
    searchMovie: (query: string) =>
   axios.get<SearchMoviesResponse>(`${IMDB_SEARCH_URL}/search/movie?${queryParams}&query=${query}`),
-    getVideos: (IMDBId: number) => axios.get<GetVideosResponse>(`${MOVIE_URL}/${IMDBId}/videos?${queryParams}`)
+    getVideos: (IMDBId: number) => axios.get<GetVideosResponse>(`${MOVIE_URL}/${IMDBId}/videos?${queryParams}`),
+    getMovieListForMovieFeed: (page: number = 1) => {
+           return axios.get<SearchMoviesResponse>(`${MOVIE_URL}/popular?${queryParams}&page=${page}`)
+
+    },
+    getBestMoviesForMainComponent: (page: number) => {
+     return axios.get<SearchMoviesResponse>(`${MOVIE_URL}/popular?${queryParams}&page=${page}`)
+    },
+    getBackDropImage: (IMDBId: number) => {
+     return axios.get<{id: Number; backdrops: {file_path: string}[]}>(`${MOVIE_URL}/${IMDBId}/images?${queryParams}`)
+    }
   }
 }
-const { getMovieCredits, getVideos } = IMDBRequests()
+const { getMovieCredits, getVideos, getBestMoviesForMainComponent, getBackDropImage, getMovieListForMovieFeed } = IMDBRequests()
 
 export const movieCredits = async (IMDBId: number) => {
   try {
@@ -59,6 +70,52 @@ const actors: CastMember[] = cast.slice(0, 12).map(({ name, character, profile_p
       writer: ''
     }
   }
+}
+
+
+export const getBackDropCadresForMainBannerComponent = async (page?: number) => {
+  const targetPage = page ?? Math.floor(Math.random() * 10) + 1
+  const {
+    data: { results }
+  } = await getBestMoviesForMainComponent(targetPage)
+  
+  const usable = results.filter(({backdrop_path}) => Boolean(backdrop_path))
+  if(usable.length === 0) return null
+
+  const movie = usable[Math.floor(Math.random() * usable.length)]
+
+  return {
+    id: String(movie.id),
+    title: movie.title,
+    year: movie.release_date ? String(new Date(movie.release_date).getFullYear()) : '',
+    rate: movie.vote_average ? movie.vote_average.toFixed(1) : '',
+    backdrop: `https://image.tmdb.org/t/p/w1280${movie.backdrop_path  }`
+  }
+}
+
+
+export const getMovieFrame = async(movieId: number, count: number = 5) => {
+  const {data} = await getBackDropImage(movieId)
+  return (data.backdrops || [])
+  .slice(0, count)
+  .map((b) => `https://image.tmdb.org/t/p/w1280${b.file_path}`)
+}
+
+
+export const getPopularMoviesForMovieFeed = async(page: number = 1) => {
+  const {
+    data: {results}
+  } = await getMovieListForMovieFeed(page)
+
+  return results
+  .filter(({poster_path}) => Boolean(poster_path))
+  .map(({id, title, poster_path, release_date, vote_average}) => ({
+          id: String(id),
+      title,
+      poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
+      year: release_date ? String(new Date(release_date).getFullYear()) : '',
+      rate: vote_average ? vote_average.toFixed(1) : ''
+  }))
 }
 
 export const getTrailer = async (IMDBId: number) => {

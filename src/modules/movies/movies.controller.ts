@@ -2,7 +2,7 @@ import {Router} from 'express'
 import * as movieService from './movies.service.js'
 import * as IMDBService from './imdb.service.js'
 import { CreateMovieRequest, GetMovieFromIMDBRequest, SearchRequest } from './movies.interfaces.js'
-import { getMovieFromIMDB } from './imdb.service.js'
+import { getMovieFromIMDB, fetchPopularMovies, getFlashNewsFrames, getMovieForMovieFeed } from './imdb.service.js'
 
 const router = Router()
 
@@ -46,6 +46,35 @@ router.get('/imdb/:IMDBId', async ({params: {IMDBId} }: GetMovieFromIMDBRequest,
    
 })
 
+
+router.get('/popular', async (_, res) => {
+  try {
+    const results = await getMovieForMovieFeed()
+    res.status(200).send(results)
+  } catch (error) {
+    res.status(400).send(error)
+  }
+})
+
+
+
+router.get('/banner', async (_, res) => {
+  try {
+    const movie = await fetchPopularMovies()
+    res.status(200).send(movie)
+  } catch (error) {
+    res.status(400).send(error)
+  }
+})
+
+router.get('/flash-news', async (_, res) => {
+  try {
+    const spotlight = await getFlashNewsFrames()
+    res.status(200).send(spotlight)
+  } catch (error) {
+    res.status(400).send(error)
+  }
+})
 router.post('/', async ({body }: CreateMovieRequest, res) => {
     try {
         const result = await movieService.create(body)
